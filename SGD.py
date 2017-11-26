@@ -14,7 +14,7 @@ def get_Sample_Point(scenario, sigma):
     if(y==-1):
         u_vector = [random.gauss(negativeCenter, sigma) for i in range(inputDimension)]
     else:
-        u_vector = [random.gauss(negativeCenter, sigma) for i in range(inputDimension)]
+        u_vector = [random.gauss(positiveCenter, sigma) for i in range(inputDimension)]
     x_list = project(scenario, u_vector)
     x_list.append(1)
 
@@ -44,7 +44,7 @@ def gen_test_dataset(scenario, sigma):
     return [get_Sample_Point(scenario, sigma) for i in range(num_test_samples)]
 
 def binary_loss(w, x, y):
-    return int(np.sign(np.dot(w, x)) == y)
+    return int(np.sign(np.dot(w, x)) != y)
 
 def logistic_loss(w, x, y):
     return np.log(1 + np.exp(-np.dot(w, x)*y))
@@ -121,4 +121,4 @@ def expirement(scenario):
         plt.errorbar(n_list, average_binary_loss_list, std_binary_loss_list, linestyle='None', marker='^')
         plt.show()
 
-expirement(1)
+expirement(2)
