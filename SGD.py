@@ -27,7 +27,18 @@ def project(scenario, u_vector):
                 u_vector[i]=1
             elif u_vector[i] < -1:
                 u_vector[i]=-1
+    elif scenario==2:
+        norm_u_vector = norm(u_vector)
+        if norm_u_vector>1:
+            for i in range(len(u_vector)):
+                u_vector[i] = u_vector[i]/norm_u_vector
     return u_vector
+
+def norm(vector):
+    sum=0
+    for i in range(len(vector)):
+        sum+= (vector[i]*vector[i])
+    return np.sqrt(sum)
 
 def gen_test_dataset(scenario, sigma):
     return [get_Sample_Point(scenario, sigma) for i in range(num_test_samples)]
@@ -39,23 +50,9 @@ def logistic_loss(w, x, y):
     return np.log(1 + np.exp(-np.dot(w, x)*y))
 
 def logistic_loss_gradient(W, X, y):
-    # print(y)
-    # print(W.shape)
-    # print(X.shape)
-    # print(np.dot(W, X))
-    # print(np.exp(y*np.dot(W, X)))
-    # print(-1/(1 + np.exp(y*np.dot(W, X))))
     return -1/(1 + np.exp(y*np.dot(W, X))) * y * X
 
 def sgd(num_training_samples, scenario, sigma):
-
-    if scenario==1:
-        M = np.sqrt(np.power(2,2)*(inputDimension+1))
-    else:
-        M = 2
-    rho = M/2
-    learning_rate = M/(rho*np.sqrt(num_training_samples))
-    W = np.zeros((inputDimension+1))
 
     if scenario==1:
         M = np.sqrt(np.power(2,2)*(inputDimension+1))
@@ -121,7 +118,6 @@ def expirement(scenario):
 
         plt.errorbar(n_list, excess_risk_list, std_logistic_loss_list, linestyle='None', marker='^')
         plt.show()
-        print(std_binary_loss_list)
         plt.errorbar(n_list, average_binary_loss_list, std_binary_loss_list, linestyle='None', marker='^')
         plt.show()
 
