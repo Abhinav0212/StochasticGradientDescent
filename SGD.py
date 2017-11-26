@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 inputDimension = 5
 negativeCenter = -(1.0/5)
@@ -54,6 +55,7 @@ def project(scenario, u_vector):
                 u_vector[i]=1
             elif u_vector[i] < -1:
                 u_vector[i]=-1
+
     # Scenario 2: multidimension ball, if a point is outside the specified space,
     # set it to the unit vector along the same direction.
     elif scenario==2:
@@ -197,6 +199,30 @@ def computeLosses(W_hat_list, test_dataset):
 
     return [(avg_risk-min_risk), std_risk, avg_binary_err, std_binary_err]
 
+def errorbar(x_data, y_data, error_data, x_label, y_label, title, label):
+    """Plots the error bar
+
+    Arguments:
+    x_data - vector containing data on x-axis
+    y_data - vector containing averages
+    error_data - vector containing standard deviations
+    x_label - plot label to be given to x-axis
+    y_label - plot label to be given to x-axis
+    title - plot title
+    label - plot label for markers
+    """
+    _, ax = plt.subplots()
+    (_, caps, _) = ax.errorbar(x_data, y_data, yerr=error_data, ls='none', fmt='o', markersize=8, capsize=5, label=label)
+    ax.set_ylabel(y_label)
+    ax.set_xlabel(x_label)
+    ax.set_title(title)
+    for i, v in enumerate(y_data):
+        ax.text(x_data[i]+10, v, ('%1.4f' % v).rstrip('0').rstrip('.'), fontsize=8)
+    ax.legend()
+
+    for cap in caps:
+        cap.set_markeredgewidth(1)
+
 def expirement(scenario):
     """Vary number of iterations and standard deviation to study using SGD's performance.
 
@@ -228,10 +254,26 @@ def expirement(scenario):
             average_binary_loss_list.append(estimated_losses[2])
             std_binary_loss_list.append(estimated_losses[3])
 
-        # plot the graphs
-        plt.errorbar(n_list, excess_risk_list, std_logistic_loss_list, linestyle='None', marker='^')
+        # Call the function to create the error bar plot for expected error risk
+        errorbar(x_data=n_list
+                , y_data=excess_risk_list
+                , error_data=std_logistic_loss_list
+                , x_label='Number of training examples (n)'
+                , y_label='Expected excess risk'
+                , title='Scenario {} : Expected excess risk vs Number of training examples (n) \n with Gaussian width '
+                        '(sigma) of Data distribution = {}'.format(scenario,str(sigma))
+                , label = 'Expected excess risk')
         plt.show()
-        plt.errorbar(n_list, average_binary_loss_list, std_binary_loss_list, linestyle='None', marker='^')
+
+        # Call the function to create the error bar plot for binary classification error
+        errorbar(x_data=n_list
+                , y_data=average_binary_loss_list
+                , error_data=std_binary_loss_list
+                , x_label='Number of training examples (n)'
+                , y_label='Expected binary classification error'
+                , title='Scenario {} : Expected binary classification error vs Number of training examples (n) \n with '
+                        'Gaussian width (sigma) of Data distribution = {}'.format(scenario,str(sigma))
+                , label='Expected binary classification error')
         plt.show()
 
 if __name__ == "__main__":
