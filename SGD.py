@@ -162,8 +162,47 @@ def sgd(num_training_samples, scenario, sigma):
     W = np.average(np.array(W_list), axis=0)
     return W
 
-def expirement(scenario):
+def computeLosses(W_hat_list, test_dataset):
+    """Compute estimated binary classification error and estimated excess risk.
 
+    Arguments:
+    W_hat_list - List of predictors (weight vectors)
+    test_dataset - List of test samples
+
+    Returns:
+    List - [Excess risk, std of risk, avg binary error, std binary error]
+    """
+    logistic_loss_estimate_list = []
+    binary_loss_estimate_list = []
+
+    # For each output predictor, estimate the average log loss and average binary
+    # classification error across the test dataset and store them.
+    for W_hat in W_hat_list:
+        logistic_loss_list = [logistic_loss(W_hat, test_sample[0], test_sample[1]) for test_sample in test_dataset]
+        average_logistic_loss = np.average(logistic_loss_list)
+        binary_loss_list = [binary_loss(W_hat, test_sample[0], test_sample[1]) for test_sample in test_dataset]
+        average_binary_loss = np.average(binary_loss_list)
+
+        logistic_loss_estimate_list.append(average_logistic_loss)
+        binary_loss_estimate_list.append(average_binary_loss)
+
+    # Estimate the minimum, average and standard deviation of the risks.
+    min_risk = np.min(logistic_loss_estimate_list)
+    avg_risk = np.average(logistic_loss_estimate_list)
+    std_risk = np.std(logistic_loss_estimate_list)
+
+    # Estimate the minimum and average  of the binary classification errors.
+    avg_binary_err = np.average(binary_loss_estimate_list)
+    std_binary_err = np.std(binary_loss_estimate_list)
+
+    return [(avg_risk-min_risk), std_risk, avg_binary_err, std_binary_err]
+
+def expirement(scenario):
+    """Vary number of iterations and standard deviation to study using SGD's performance.
+
+    Arguments:
+    scenario - selects the input space (1:hypercube,2:multidimension ball)
+    """
     n_list = [50, 100, 500, 1000]
     sigma_list = [0.05, 3]
 
@@ -171,42 +210,30 @@ def expirement(scenario):
 
         test_dataset = gen_test_dataset(scenario, sigma)
 
+        # Store the expected excess risk, expected classification error and their
+        # standard deviations for varying values of n.
         excess_risk_list= []
         std_logistic_loss_list = []
         average_binary_loss_list = []
         std_binary_loss_list = []
 
         for n in n_list:
-
+            # For each n and sigma, run SGD 30 times and store the output predictor.
             W_hat_list = [sgd(n, scenario, sigma) for i in range(30)]
+            # Compute estimated binary classification error and estimated excess risk.
+            estimated_losses = computeLosses(W_hat_list, test_dataset)
 
-            logistic_loss_estimate_list = []
-            binary_loss_estimate_list = []
+            excess_risk_list.append(estimated_losses[0])
+            std_logistic_loss_list.append(estimated_losses[1])
+            average_binary_loss_list.append(estimated_losses[2])
+            std_binary_loss_list.append(estimated_losses[3])
 
-            for W_hat in W_hat_list:
-                logistic_loss_list = [logistic_loss(W_hat, test_sample[0], test_sample[1]) for test_sample in test_dataset]
-                average_logistic_loss = np.average(logistic_loss_list)
-                binary_loss_list = [binary_loss(W_hat, test_sample[0], test_sample[1]) for test_sample in test_dataset]
-                average_binary_loss = np.average(binary_loss_list)
-
-                logistic_loss_estimate_list.append(average_logistic_loss)
-                binary_loss_estimate_list.append(average_binary_loss)
-
-            min_logistic_loss = np.min(logistic_loss_estimate_list)
-            avg_logistic_loss = np.average(logistic_loss_estimate_list)
-            std_logistic_loss = np.std(logistic_loss_estimate_list)
-
-            avg_binary_loss = np.average(binary_loss_estimate_list)
-            std_binary_loss = np.std(binary_loss_estimate_list)
-
-            excess_risk_list.append(avg_logistic_loss-min_logistic_loss)
-            std_logistic_loss_list.append(std_logistic_loss)
-            average_binary_loss_list.append(avg_binary_loss)
-            std_binary_loss_list.append(std_binary_loss)
-
+        # plot the graphs
         plt.errorbar(n_list, excess_risk_list, std_logistic_loss_list, linestyle='None', marker='^')
         plt.show()
         plt.errorbar(n_list, average_binary_loss_list, std_binary_loss_list, linestyle='None', marker='^')
         plt.show()
 
-expirement(2)
+if __name__ == "__main__":
+    expirement(1)
+    expirement(2)
