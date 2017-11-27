@@ -1,3 +1,4 @@
+import sys
 import random
 import numpy as np
 import matplotlib
@@ -197,9 +198,9 @@ def computeLosses(W_hat_list, test_dataset):
     avg_binary_err = np.average(binary_loss_estimate_list)
     std_binary_err = np.std(binary_loss_estimate_list)
 
-    return [(avg_risk-min_risk), std_risk, avg_binary_err, std_binary_err]
+    return [avg_risk, std_risk, min_risk, (avg_risk-min_risk), avg_binary_err, std_binary_err]
 
-def errorbar(x_data, y_data, error_data, x_label, y_label, title, label):
+def errorbar(x_data, y_data, error_data, x_label, y_label, label):
     """Plots the error bar
 
     Arguments:
@@ -215,7 +216,6 @@ def errorbar(x_data, y_data, error_data, x_label, y_label, title, label):
     (_, caps, _) = ax.errorbar(x_data, y_data, yerr=error_data, ls='none', fmt='o', markersize=8, capsize=5, label=label)
     ax.set_ylabel(y_label)
     ax.set_xlabel(x_label)
-    ax.set_title(title)
     for i, v in enumerate(y_data):
         ax.text(x_data[i]+10, v, ('%1.4f' % v).rstrip('0').rstrip('.'), fontsize=8)
     ax.legend()
@@ -229,8 +229,10 @@ def expirement(scenario):
     Arguments:
     scenario - selects the input space (1:hypercube,2:multidimension ball)
     """
+
+    print("\n============ SCENARIO {} ============\n".format(scenario))
     n_list = [50, 100, 500, 1000]
-    sigma_list = [0.05, 3]
+    sigma_list = [0.05, 0.3]
 
     for sigma in sigma_list:
 
@@ -249,10 +251,22 @@ def expirement(scenario):
             # Compute estimated binary classification error and estimated excess risk.
             estimated_losses = computeLosses(W_hat_list, test_dataset)
 
-            excess_risk_list.append(estimated_losses[0])
+            print("sigma = ", sigma)
+            print("n = ",n)
+            print("==Logistic Loss==")
+            print("Mean : ",estimated_losses[0])
+            print("Standard Deviation : ", estimated_losses[1])
+            print("Minimum : ", estimated_losses[2])
+            print("Excess risk : ", estimated_losses[3])
+            print("==Binary Classification Error==")
+            print("Mean : ",estimated_losses[4])
+            print("Standard Deviation : ", estimated_losses[5])
+            print("\n")
+
+            excess_risk_list.append(estimated_losses[3])
             std_logistic_loss_list.append(estimated_losses[1])
-            average_binary_loss_list.append(estimated_losses[2])
-            std_binary_loss_list.append(estimated_losses[3])
+            average_binary_loss_list.append(estimated_losses[4])
+            std_binary_loss_list.append(estimated_losses[5])
 
         # Call the function to create the error bar plot for expected error risk
         errorbar(x_data=n_list
@@ -260,10 +274,8 @@ def expirement(scenario):
                 , error_data=std_logistic_loss_list
                 , x_label='Number of training examples (n)'
                 , y_label='Expected excess risk'
-                , title='Scenario {} : Expected excess risk vs Number of training examples (n) \n with Gaussian width '
-                        '(sigma) of Data distribution = {}'.format(scenario,str(sigma))
                 , label = 'Expected excess risk')
-        plt.show()
+        plt.savefig('plots/scenario' + str(scenario) + "_sigma" + str(sigma) + "_excess_risk" + '.jpg')
 
         # Call the function to create the error bar plot for binary classification error
         errorbar(x_data=n_list
@@ -271,11 +283,11 @@ def expirement(scenario):
                 , error_data=std_binary_loss_list
                 , x_label='Number of training examples (n)'
                 , y_label='Expected binary classification error'
-                , title='Scenario {} : Expected binary classification error vs Number of training examples (n) \n with '
-                        'Gaussian width (sigma) of Data distribution = {}'.format(scenario,str(sigma))
                 , label='Expected binary classification error')
-        plt.show()
+        plt.savefig('plots/scenario' + str(scenario) + "_sigma" + str(sigma)+"_binary_error"+'.jpg')
 
 if __name__ == "__main__":
+    sys.stdout = open("results.txt", "w")
     expirement(1)
     expirement(2)
+    sys.stdout.close()

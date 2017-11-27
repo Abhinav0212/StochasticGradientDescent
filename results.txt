@@ -1,0 +1,198 @@
+
+============ SCENARIO 1 ============
+
+sigma =  0.05
+n =  50
+==Logistic Loss==
+Mean :  0.455766137923
+Standard Deviation :  0.00905226813238
+Minimum :  0.445139747576
+Excess risk :  0.0106263903468
+==Binary Classification Error==
+Mean :  0.00333333333333
+Standard Deviation :  0.0161932770687
+
+
+sigma =  0.05
+n =  100
+==Logistic Loss==
+Mean :  0.407762939756
+Standard Deviation :  0.00310010193449
+Minimum :  0.401861521627
+Excess risk :  0.00590141812843
+==Binary Classification Error==
+Mean :  0.0
+Standard Deviation :  0.0
+
+
+sigma =  0.05
+n =  500
+==Logistic Loss==
+Mean :  0.353191442384
+Standard Deviation :  0.000840307644437
+Minimum :  0.352107970726
+Excess risk :  0.00108347165878
+==Binary Classification Error==
+Mean :  0.0
+Standard Deviation :  0.0
+
+
+sigma =  0.05
+n =  1000
+==Logistic Loss==
+Mean :  0.341393134638
+Standard Deviation :  0.000332783838479
+Minimum :  0.340816413658
+Excess risk :  0.000576720980318
+==Binary Classification Error==
+Mean :  0.0
+Standard Deviation :  0.0
+
+
+sigma =  0.3
+n =  50
+==Logistic Loss==
+Mean :  0.497532542246
+Standard Deviation :  0.0196990671417
+Minimum :  0.464042582261
+Excess risk :  0.0334899599847
+==Binary Classification Error==
+Mean :  0.119083333333
+Standard Deviation :  0.0353581870136
+
+
+sigma =  0.3
+n =  100
+==Logistic Loss==
+Mean :  0.45938960156
+Standard Deviation :  0.00858678745842
+Minimum :  0.438442060994
+Excess risk :  0.0209475405654
+==Binary Classification Error==
+Mean :  0.0955
+Standard Deviation :  0.0171561456433
+
+
+sigma =  0.3
+n =  500
+==Logistic Loss==
+Mean :  0.40754523217
+Standard Deviation :  0.00310120667628
+Minimum :  0.400461830661
+Excess risk :  0.00708340150972
+==Binary Classification Error==
+Mean :  0.0899166666667
+Standard Deviation :  0.0106748015855
+
+
+sigma =  0.3
+n =  1000
+==Logistic Loss==
+Mean :  0.39647230192
+Standard Deviation :  0.00127889467626
+Minimum :  0.394007295269
+Excess risk :  0.00246500665066
+==Binary Classification Error==
+Mean :  0.0871666666667
+Standard Deviation :  0.00527309733985
+
+
+
+============ SCENARIO 2 ============
+
+sigma =  0.05
+n =  50
+==Logistic Loss==
+Mean :  0.532620730449
+Standard Deviation :  0.00375034285447
+Minimum :  0.52662484644
+Excess risk :  0.00599588400894
+==Binary Classification Error==
+Mean :  0.000583333333333
+Standard Deviation :  0.00238775813032
+
+
+sigma =  0.05
+n =  100
+==Logistic Loss==
+Mean :  0.521444640616
+Standard Deviation :  0.00330222666014
+Minimum :  0.518169272798
+Excess risk :  0.00327536781753
+==Binary Classification Error==
+Mean :  0.000416666666667
+Standard Deviation :  0.00224381866964
+
+
+sigma =  0.05
+n =  500
+==Logistic Loss==
+Mean :  0.506813598657
+Standard Deviation :  0.00078040534254
+Minimum :  0.505946365958
+Excess risk :  0.000867232698269
+==Binary Classification Error==
+Mean :  0.0
+Standard Deviation :  0.0
+
+
+sigma =  0.05
+n =  1000
+==Logistic Loss==
+Mean :  0.503660982591
+Standard Deviation :  0.000441366539874
+Minimum :  0.502850000659
+Excess risk :  0.000810981932617
+==Binary Classification Error==
+Mean :  0.0
+Standard Deviation :  0.0
+
+
+sigma =  0.3
+n =  50
+==Logistic Loss==
+Mean :  0.558917338762
+Standard Deviation :  0.00998457305177
+Minimum :  0.544096692015
+Excess risk :  0.0148206467469
+==Binary Classification Error==
+Mean :  0.130916666667
+Standard Deviation :  0.0609011608173
+
+
+sigma =  0.3
+n =  100
+==Logistic Loss==
+Mean :  0.548076132219
+Standard Deviation :  0.00520611987454
+Minimum :  0.540895612462
+Excess risk :  0.00718051975761
+==Binary Classification Error==
+Mean :  0.1115
+Standard Deviation :  0.0324589484323
+
+
+sigma =  0.3
+n =  500
+==Logistic Loss==
+Mean :  0.532744425125
+Standard Deviation :  0.00141900836861
+Minimum :  0.530334530374
+Excess risk :  0.00240989475147
+==Binary Classification Error==
+Mean :  0.0880833333333
+Standard Deviation :  0.00697266488192
+
+
+sigma =  0.3
+n =  1000
+==Logistic Loss==
+Mean :  0.528992443224
+Standard Deviation :  0.000796410998005
+Minimum :  0.527374664932
+Excess risk :  0.00161777829266
+==Binary Classification Error==
+Mean :  0.0865833333333
+Standard Deviation :  0.0038988958551
+
+
