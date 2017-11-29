@@ -200,7 +200,7 @@ def computeLosses(W_hat_list, test_dataset):
 
     return [avg_risk, std_risk, min_risk, (avg_risk-min_risk), avg_binary_err, std_binary_err]
 
-def errorbar(x_data, y_data, error_data, x_label, y_label, label):
+def errorbar(ax, x_data, y_data, error_data, x_label, y_label, label):
     """Plots the error bar
 
     Arguments:
@@ -212,12 +212,11 @@ def errorbar(x_data, y_data, error_data, x_label, y_label, label):
     title - plot title
     label - plot label for markers
     """
-    _, ax = plt.subplots()
-    (_, caps, _) = ax.errorbar(x_data, y_data, yerr=error_data, ls='none', fmt='o', markersize=8, capsize=5, label=label)
+    (_, caps, _) = ax.errorbar(x_data, y_data, yerr=error_data, fmt='-o', markersize=8, capsize=5, label=label)
     ax.set_ylabel(y_label)
     ax.set_xlabel(x_label)
     for i, v in enumerate(y_data):
-        ax.text(x_data[i]+10, v, ('%1.4f' % v).rstrip('0').rstrip('.'), fontsize=8)
+        ax.text(x_data[i]+10, v*1.05, ('%1.4f' % v).rstrip('0').rstrip('.'), fontsize=8)
     ax.legend()
 
     for cap in caps:
@@ -234,6 +233,8 @@ def expirement(scenario):
     n_list = [50, 100, 500, 1000]
     sigma_list = [0.05, 0.3]
 
+    fig1, ax1 = plt.subplots()
+    fig2, ax2 = plt.subplots()
     for sigma in sigma_list:
 
         test_dataset = gen_test_dataset(scenario, sigma)
@@ -269,22 +270,25 @@ def expirement(scenario):
             std_binary_loss_list.append(estimated_losses[5])
 
         # Call the function to create the error bar plot for expected error risk
-        errorbar(x_data=n_list
+        errorbar(ax1, x_data=n_list
                 , y_data=excess_risk_list
                 , error_data=std_logistic_loss_list
                 , x_label='Number of training examples (n)'
                 , y_label='Expected excess risk'
-                , label = 'Expected excess risk')
-        plt.savefig('plots/scenario' + str(scenario) + "_sigma" + str(sigma) + "_excess_risk" + '.jpg')
+                , label = 'sigma = {}'.format(sigma))
+        # plt.savefig('plots/scenario_' + str(scenario) + "_excess_risk" + '.jpg')
 
         # Call the function to create the error bar plot for binary classification error
-        errorbar(x_data=n_list
+        errorbar(ax2, x_data=n_list
                 , y_data=average_binary_loss_list
                 , error_data=std_binary_loss_list
                 , x_label='Number of training examples (n)'
                 , y_label='Expected binary classification error'
-                , label='Expected binary classification error')
-        plt.savefig('plots/scenario' + str(scenario) + "_sigma" + str(sigma)+"_binary_error"+'.jpg')
+                , label='sigma = {}'.format(sigma))
+        # plt.savefig('plots/scenario' + str(scenario) + "_sigma" + str(sigma)+"_binary_error"+'.jpg')
+
+    fig1.savefig('plots/scenario_' + str(scenario) + "_excess_risk" + '.jpg')
+    fig2.savefig('plots/scenario_' + str(scenario) + "_binary_error"+'.jpg')
 
 if __name__ == "__main__":
     sys.stdout = open("results.txt", "w")
