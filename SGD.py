@@ -142,11 +142,11 @@ def sgd(num_training_samples, scenario, sigma):
     # For multidimension ball, M is the value of the diameter
     if scenario==1:
         M = np.sqrt(np.power(2,2)*(inputDimension+1))
+        rho = M/2
     else:
         M = 2
+        rho = np.sqrt(2)
 
-    # rho = max(||x||) which in both scenarios is half of M.
-    rho = M/2
     learning_rate = M/(rho*np.sqrt(num_training_samples))
 
     # Initialize weight vector to zero.
